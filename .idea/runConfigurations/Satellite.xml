@@ -8,7 +8,7 @@
       </map>
     </option>
     <option name="jreName" value="GraalVM 20.1.0" />
-    <option name="vmOptions" value="-Dquarkus.http.port=8081" />
+    <option name="vmOptions" />
     <option name="workingDir" value="$PROJECT_DIR$/satellite" />
     <method v="2" />
   </configuration>

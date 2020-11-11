@@ -19,17 +19,27 @@
   </properties>
 
   <modules>
+    <module>metrics-api</module>
+    <module>metrics-common</module>
     <module>satellite</module>
   </modules>
 
   <dependencyManagement>
     <dependencies>
+      <!-- Quarkus -->
       <dependency>
         <groupId>io.quarkus</groupId>
         <artifactId>quarkus-universe-bom</artifactId>
         <version>${quarkus.version}</version>
         <type>pom</type>
         <scope>import</scope>
+      </dependency>
+
+      <!-- NetPlan Models -->
+      <dependency>
+        <groupId>io.conceptive.netplan</groupId>
+        <artifactId>model</artifactId>
+        <version>${model.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
