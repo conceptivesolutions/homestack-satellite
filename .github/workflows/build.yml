@@ -1,0 +1,39 @@
+name: Build and Push
+
+on:
+  workflow_dispatch:
+    on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout Sources
+      - name: Checkout Sources
+        uses: actions/checkout@v2
+
+      # Init JVM
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      # Build all modules with tests enabled
+      - name: Build JVM Mode
+        run: mvn -B clean install
+
+      # Login to Nexus
+      - uses: azure/docker-login@v1
+        with:
+          login-server: images.conceptive.io
+          username: ${{ secrets.nexus_user }}
+          password: ${{ secrets.nexus_password }}
+
+      # Create Docker Image
+      - name: Create Image
+        run: |
+          docker build -f src/main/docker/Dockerfile.jvm -t images.conceptive.io/netplan.satellite:latest .
+          docker push images.conceptive.io/netplan.satellite:latest
