@@ -1,0 +1,15 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Satellite" type="QuarkusMavenBridge">
+    <option name="envVariables">
+      <map>
+        <entry key="SATELLITE_ID" value="sat1" />
+        <entry key="USER_APIKEY" value="secretapikey" />
+        <entry key="USER_MAIL" value="w.glanzer@conceptive.io" />
+      </map>
+    </option>
+    <option name="jreName" value="GraalVM 20.1.0" />
+    <option name="vmOptions" value="-Dquarkus.http.port=8081" />
+    <option name="workingDir" value="$PROJECT_DIR$/satellite" />
+    <method v="2" />
+  </configuration>
+</component>
