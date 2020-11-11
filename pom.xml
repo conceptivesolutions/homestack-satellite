@@ -17,7 +17,7 @@
   <name>NetPlan IoT: Satellite Parent</name>
 
   <properties>
-    <quarkus.version>1.7.3.Final</quarkus.version>
+    <quarkus.version>1.9.2.Final</quarkus.version>
     <model.version>1.0.1-SNAPSHOT</model.version>
   </properties>
 
