@@ -5,10 +5,10 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>io.conceptive.netplan</groupId>
-  <artifactId>satellite</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
-
-  <name>NetPlan IoT: Satellite</name>
+  <artifactId>satellite-parent</artifactId>
+  <version>1.0.0</version>
+  <packaging>pom</packaging>
+  <name>NetPlan IoT: Satellite Parent</name>
 
   <properties>
     <quarkus.version>1.7.3.Final</quarkus.version>
@@ -17,6 +17,10 @@
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
   </properties>
+
+  <modules>
+    <module>satellite</module>
+  </modules>
 
   <dependencyManagement>
     <dependencies>
@@ -55,23 +59,6 @@
   </repositories>
 
   <dependencies>
-    <!-- REST -->
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-resteasy-jsonb</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-rest-client</artifactId>
-    </dependency>
-
-    <!-- Models -->
-    <dependency>
-      <groupId>io.conceptive.netplan</groupId>
-      <artifactId>model</artifactId>
-      <version>${model.version}</version>
-    </dependency>
-
     <!-- Guava -->
     <dependency>
       <groupId>com.google.guava</groupId>
