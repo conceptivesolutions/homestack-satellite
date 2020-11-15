@@ -4,12 +4,12 @@ import io.conceptive.netplan.model.satellite.SatelliteConfigurationDataModel;
 import io.conceptive.netplan.satellite.config.IConfigProvider;
 import io.quarkus.runtime.StartupEvent;
 import io.reactivex.Observable;
-import io.reactivex.subjects.*;
+import io.reactivex.subjects.BehaviorSubject;
 import org.jboss.logging.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.*;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import java.util.Objects;
 
@@ -41,7 +41,7 @@ public class DynamicConfigProvider implements IConfigProvider
   void onStart(@Observes StartupEvent pStartupEvent)
   {
     client.onConfigReceived(pConfig -> {
-      if(!Objects.equals(currentlyUsedConfigurationSubject.getValue(), pConfig))
+      if (!Objects.equals(currentlyUsedConfigurationSubject.getValue(), pConfig))
       {
         Logger.getLogger(DynamicConfigProvider.class).info("New configuration received from cloud host");
         currentlyUsedConfigurationSubject.onNext(pConfig);

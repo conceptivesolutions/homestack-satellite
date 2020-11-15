@@ -67,14 +67,14 @@ class SatelliteConfigWebSocketClient
   @OnMessage
   void onMessage(@NotNull WebsocketEvent<?> pMessage)
   {
-    if(connected != Boolean.TRUE)
+    if (connected != Boolean.TRUE)
     {
       _LOGGER.info("Connection to cloud host established and authenticated successfully");
       connected = true;
     }
 
     // new config received from server
-    if(pMessage.equalType(SatelliteWebSocketEvents.CONFIG))
+    if (pMessage.equalType(SatelliteWebSocketEvents.CONFIG))
       modelConsumer.accept(SatelliteWebSocketEvents.CONFIG.payloadOf(pMessage));
   }
 
@@ -106,7 +106,7 @@ class SatelliteConfigWebSocketClient
       if (connected == Boolean.FALSE)
         ContainerProvider.getWebSocketContainer().connectToServer(this, new URI(url));
     }
-    catch(Exception e)
+    catch (Exception e)
     {
       _LOGGER.error("Failed to connect to cloud host '" + backendBaseURL + "/satellites" + "'");
     }
@@ -118,7 +118,7 @@ class SatelliteConfigWebSocketClient
   @Scheduled(every = "5m", concurrentExecution = Scheduled.ConcurrentExecution.SKIP)
   void sendAuthenticationEvent()
   {
-    if(session != null)
+    if (session != null)
       session.getAsyncRemote().sendObject(SatelliteWebSocketEvents.AUTHENTICATE.payload(new AuthenticateEventData(satelliteID, "1.0.0", jwtProvider.getValidJWT())));
   }
 
@@ -133,7 +133,7 @@ class SatelliteConfigWebSocketClient
       if (session != null)
         session.getAsyncRemote().sendPing(ByteBuffer.allocate(0));
     }
-    catch(Exception e)
+    catch (Exception e)
     {
       _LOGGER.error("Failed to send keepalive message to cloud host");
     }
