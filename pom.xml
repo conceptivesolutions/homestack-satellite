@@ -18,7 +18,7 @@
 
   <properties>
     <quarkus.version>1.9.2.Final</quarkus.version>
-    <model.version>1.0.1-SNAPSHOT</model.version>
+    <model.version>1.0.1</model.version>
   </properties>
 
   <modules>
