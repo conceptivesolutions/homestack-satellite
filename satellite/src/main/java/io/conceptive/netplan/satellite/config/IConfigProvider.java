@@ -1,6 +1,7 @@
 package io.conceptive.netplan.satellite.config;
 
 import io.conceptive.netplan.model.satellite.SatelliteConfigurationDataModel;
+import io.reactivex.Observable;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -10,11 +11,11 @@ public interface IConfigProvider
 {
 
   /**
-   * Returns the current configuration that should be used
+   * Returns an observable that will contain the currently active satellite config
    *
-   * @return the current model - could change over time
+   * @return the observable with the currently active config
    */
   @NotNull
-  SatelliteConfigurationDataModel getConfig();
+  Observable<SatelliteConfigurationDataModel> observe();
 
 }

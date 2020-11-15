@@ -48,5 +48,17 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-smallrye-jwt</artifactId>
     </dependency>
+
+    <!-- WebSocket -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-undertow-websockets</artifactId>
+    </dependency>
+
+    <!-- Scheduler -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-scheduler</artifactId>
+    </dependency>
   </dependencies>
 </project>
