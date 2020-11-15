@@ -1,10 +1,11 @@
-package io.conceptive.netplan.satellite.config.internal;
+package io.conceptive.netplan.satellite.websocket;
 
 import io.conceptive.netplan.model.satellite.SatelliteConfigurationDataModel;
 import io.conceptive.netplan.model.satellite.events.SatelliteWebSocketEvents;
 import io.conceptive.netplan.model.satellite.events.data.AuthenticateEventData;
 import io.conceptive.netplan.model.websocket.*;
 import io.conceptive.netplan.satellite.auth.IJWTProvider;
+import io.conceptive.netplan.satellite.websocket.api.IConfigConsumer;
 import io.quarkus.runtime.Startup;
 import io.quarkus.scheduler.Scheduled;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -12,11 +13,11 @@ import org.jboss.logging.Logger;
 import org.jetbrains.annotations.*;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.websocket.*;
 import java.net.URI;
 import java.nio.ByteBuffer;
-import java.util.function.Consumer;
 
 /**
  * Client to communicate with the backend
@@ -39,19 +40,11 @@ class SatelliteConfigWebSocketClient
   @Inject
   IJWTProvider jwtProvider;
 
-  private Boolean connected = false; // true = connected, false = not connected, null = pending
-  private Consumer<SatelliteConfigurationDataModel> modelConsumer;
-  private Session session;
+  @Inject
+  Instance<IConfigConsumer> consumers;
 
-  /**
-   * Sets the current consumer that gets the models, if some were retrieved
-   *
-   * @param pModelConsumer Consumer for the model
-   */
-  public void onConfigReceived(@NotNull Consumer<SatelliteConfigurationDataModel> pModelConsumer)
-  {
-    modelConsumer = pModelConsumer;
-  }
+  private Boolean connected = false; // true = connected, false = not connected, null = pending
+  private Session session;
 
   @OnOpen
   void onOpen(@NotNull Session pSession, @Nullable EndpointConfig pConfig)
@@ -75,7 +68,10 @@ class SatelliteConfigWebSocketClient
 
     // new config received from server
     if (pMessage.equalType(SatelliteWebSocketEvents.CONFIG))
-      modelConsumer.accept(SatelliteWebSocketEvents.CONFIG.payloadOf(pMessage));
+    {
+      SatelliteConfigurationDataModel model = SatelliteWebSocketEvents.CONFIG.payloadOf(pMessage);
+      consumers.forEach(pConsumer -> pConsumer.onSatelliteConfigReceived(model));
+    }
   }
 
   @OnClose
