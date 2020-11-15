@@ -1,11 +1,12 @@
 package io.conceptive.netplan.satellite.websocket;
 
+import io.conceptive.netplan.model.data.MetricRecordDataModel;
 import io.conceptive.netplan.model.satellite.SatelliteConfigurationDataModel;
 import io.conceptive.netplan.model.satellite.events.SatelliteWebSocketEvents;
-import io.conceptive.netplan.model.satellite.events.data.AuthenticateEventData;
+import io.conceptive.netplan.model.satellite.events.data.*;
 import io.conceptive.netplan.model.websocket.*;
 import io.conceptive.netplan.satellite.auth.IJWTProvider;
-import io.conceptive.netplan.satellite.websocket.api.IConfigConsumer;
+import io.conceptive.netplan.satellite.websocket.api.*;
 import io.quarkus.runtime.Startup;
 import io.quarkus.scheduler.Scheduled;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -18,6 +19,7 @@ import javax.inject.Inject;
 import javax.websocket.*;
 import java.net.URI;
 import java.nio.ByteBuffer;
+import java.util.Set;
 
 /**
  * Client to communicate with the backend
@@ -27,7 +29,7 @@ import java.nio.ByteBuffer;
 @Startup
 @ApplicationScoped
 @ClientEndpoint(decoders = WebsocketEventCoder.class, encoders = WebsocketEventCoder.class)
-class SatelliteConfigWebSocketClient
+class SatelliteConfigWebSocketClient implements IMetricRecordPublisher
 {
   private static final Logger _LOGGER = Logger.getLogger(SatelliteConfigWebSocketClient.class);
 
@@ -108,13 +110,22 @@ class SatelliteConfigWebSocketClient
     }
   }
 
+  @Override
+  public void sendMetricRecords(@NotNull Set<MetricRecordDataModel> pRecords)
+  {
+    if (session != null)
+      session.getAsyncRemote().sendObject(SatelliteWebSocketEvents.RECORDS.payload(new MetricRecordsEventData(pRecords)));
+    else
+      _LOGGER.warn("Tried to upload records, but connection was not esablished");
+  }
+
   /**
    * Sends the authentication event, to renew the login lease
    */
   @Scheduled(every = "5m", concurrentExecution = Scheduled.ConcurrentExecution.SKIP)
   void sendAuthenticationEvent()
   {
-    if (session != null)
+    if (session != null) // todo version
       session.getAsyncRemote().sendObject(SatelliteWebSocketEvents.AUTHENTICATE.payload(new AuthenticateEventData(satelliteID, "1.0.0", jwtProvider.getValidJWT())));
   }
 
