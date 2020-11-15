@@ -1,4 +1,4 @@
-package io.conceptive.netplan.satellite.auth;
+package io.conceptive.netplan.satellite.auth.internal;
 
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 import org.jetbrains.annotations.NotNull;
