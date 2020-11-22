@@ -1,4 +1,4 @@
-= NetPlan IoT Satellite
+= HomeStack Satellite
 
 Der Satellite ist ein Endpoint im lokalen Netz des Benutzers, um ein Monitoring zu ermöglichen.
 Dieser Satellite ist jedoch von außen direkt nicht erreichbar, weshalb er über das Internet eine Websocket Verbindung aufbauen muss.

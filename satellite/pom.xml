@@ -4,29 +4,29 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>io.conceptive.netplan</groupId>
+    <groupId>io.conceptive.homestack</groupId>
     <artifactId>satellite-parent</artifactId>
     <version>1.0.0</version>
   </parent>
 
   <artifactId>satellite</artifactId>
-  <name>NetPlan IoT: Satellite</name>
+  <name>HomeStack: Satellite</name>
 
   <dependencies>
     <!-- Models -->
     <dependency>
-      <groupId>io.conceptive.netplan</groupId>
+      <groupId>io.conceptive.homestack</groupId>
       <artifactId>model</artifactId>
     </dependency>
 
     <!-- Metrics -->
     <dependency>
-      <groupId>io.conceptive.netplan</groupId>
+      <groupId>io.conceptive.homestack</groupId>
       <artifactId>metrics-api</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>io.conceptive.netplan</groupId>
+      <groupId>io.conceptive.homestack</groupId>
       <artifactId>metrics-common</artifactId>
       <version>${project.version}</version>
     </dependency>

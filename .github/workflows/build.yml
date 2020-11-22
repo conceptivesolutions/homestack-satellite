@@ -43,5 +43,5 @@ jobs:
       - name: Create Image
         working-directory: ./satellite
         run: |
-          docker build -f src/main/docker/Dockerfile.jvm -t images.conceptive.io/netplan.satellite:latest .
-          docker push images.conceptive.io/netplan.satellite:latest
+          docker build -f src/main/docker/Dockerfile.jvm -t images.conceptive.io/homestack.satellite:latest .
+          docker push images.conceptive.io/homestack.satellite:latest
