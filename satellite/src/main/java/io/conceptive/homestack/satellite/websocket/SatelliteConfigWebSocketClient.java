@@ -5,7 +5,6 @@ import io.conceptive.homestack.model.satellite.SatelliteConfigurationDataModel;
 import io.conceptive.homestack.model.satellite.events.SatelliteWebSocketEvents;
 import io.conceptive.homestack.model.satellite.events.data.*;
 import io.conceptive.homestack.model.websocket.*;
-import io.conceptive.homestack.satellite.auth.IJWTProvider;
 import io.conceptive.homestack.satellite.websocket.api.*;
 import io.quarkus.runtime.Startup;
 import io.quarkus.scheduler.Scheduled;
@@ -36,11 +35,11 @@ class SatelliteConfigWebSocketClient implements IMetricRecordPublisher
   @ConfigProperty(name = "homestack.satellite.id")
   String satelliteID;
 
+  @ConfigProperty(name = "homestack.satellite.token")
+  String apiKey;
+
   @ConfigProperty(name = "homestack.rest.backend.url")
   String backendBaseURL;
-
-  @Inject
-  IJWTProvider jwtProvider;
 
   @Inject
   Instance<IConfigConsumer> consumers;
@@ -126,7 +125,7 @@ class SatelliteConfigWebSocketClient implements IMetricRecordPublisher
   void sendAuthenticationEvent()
   {
     if (session != null) // todo version
-      session.getAsyncRemote().sendObject(SatelliteWebSocketEvents.AUTHENTICATE.payload(new AuthenticateEventData(satelliteID, "1.0.0", jwtProvider.getValidJWT())));
+      session.getAsyncRemote().sendObject(SatelliteWebSocketEvents.AUTHENTICATE.payload(new AuthenticateEventData(satelliteID, "1.0.0", apiKey)));
   }
 
   /**
