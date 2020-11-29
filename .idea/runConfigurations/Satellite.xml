@@ -1,49 +1,8 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Satellite" type="MavenRunConfiguration" factoryName="Maven">
-    <MavenSettings>
-      <option name="myGeneralSettings" />
-      <option name="myRunnerSettings">
-        <MavenRunnerSettings>
-          <option name="delegateBuildToMaven" value="false" />
-          <option name="environmentProperties">
-            <map>
-              <entry key="SATELLITE_ID" value="sat1" />
-              <entry key="USER_APIKEY" value="secretapikey" />
-              <entry key="USER_MAIL" value="w.glanzer@conceptive.io" />
-            </map>
-          </option>
-          <option name="jreName" value="#USE_PROJECT_JDK" />
-          <option name="mavenProperties">
-            <map />
-          </option>
-          <option name="passParentEnv" value="true" />
-          <option name="runMavenInBackground" value="true" />
-          <option name="skipTests" value="false" />
-          <option name="vmOptions" value="" />
-        </MavenRunnerSettings>
-      </option>
-      <option name="myRunnerParameters">
-        <MavenRunnerParameters>
-          <option name="profiles">
-            <set />
-          </option>
-          <option name="goals">
-            <list>
-              <option value="quarkus:dev" />
-              <option value="-Ddebug=5006" />
-              <option value="-Dquarkus.http.port=8081" />
-              <option value="-Dnetplan.rest.backend.url=http://localhost:8080" />
-            </list>
-          </option>
-          <option name="pomFileName" value="pom.xml" />
-          <option name="profilesMap">
-            <map />
-          </option>
-          <option name="resolveToWorkspace" value="true" />
-          <option name="workingDirPath" value="$PROJECT_DIR$/satellite" />
-        </MavenRunnerParameters>
-      </option>
-    </MavenSettings>
+  <configuration default="false" name="Satellite" type="QuarkusMavenBridge">
+    <option name="jreName" value="11" />
+    <option name="vmOptions" value="-Dquarkus.http.port=8081 -Dhomestack.rest.backend.url=http://localhost:8080 -Dhomestack.satellite.id=i9ok0ktQgOLb5LpXuR9x8ZUCvgoc90CBr1Ng1C3s9CtgaKV4Hxv9ciEwwfF0V3Mv -Dhomestack.satellite.token=pfPZwVFoWGutmtxzOUzxkvW1xPAEU7pn" />
+    <option name="workingDir" value="$PROJECT_DIR$/satellite" />
     <method v="2" />
   </configuration>
 </component>
