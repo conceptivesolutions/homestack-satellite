@@ -32,17 +32,17 @@ class SatelliteConfigWebSocketClient implements IMetricRecordPublisher
 {
   private static final Logger _LOGGER = Logger.getLogger(SatelliteConfigWebSocketClient.class);
 
-  @ConfigProperty(name = "homestack.satellite.id")
-  String satelliteID;
+  @ConfigProperty(name = "homestack.satellite.lease.id")
+  protected String leaseID;
 
-  @ConfigProperty(name = "homestack.satellite.token")
-  String apiKey;
+  @ConfigProperty(name = "homestack.satellite.lease.token")
+  protected String leaseToken;
 
   @ConfigProperty(name = "homestack.rest.backend.url")
-  String backendBaseURL;
+  protected String backendBaseURL;
 
   @Inject
-  Instance<IConfigConsumer> consumers;
+  protected Instance<IConfigConsumer> consumers;
 
   private Boolean connected = false; // true = connected, false = not connected, null = pending
   private Session session;
@@ -113,7 +113,11 @@ class SatelliteConfigWebSocketClient implements IMetricRecordPublisher
   public void sendMetricRecords(@NotNull Set<MetricRecordDataModel> pRecords)
   {
     if (session != null)
-      session.getAsyncRemote().sendObject(SatelliteWebSocketEvents.RECORDS.payload(new MetricRecordsEventData(pRecords)));
+    {
+      MetricRecordsEventData data = new MetricRecordsEventData();
+      data.records = pRecords;
+      session.getAsyncRemote().sendObject(SatelliteWebSocketEvents.RECORDS.payload(data));
+    }
     else
       _LOGGER.warn("Tried to upload records, but connection was not esablished");
   }
@@ -125,7 +129,12 @@ class SatelliteConfigWebSocketClient implements IMetricRecordPublisher
   void sendAuthenticationEvent()
   {
     if (session != null) // todo version
-      session.getAsyncRemote().sendObject(SatelliteWebSocketEvents.AUTHENTICATE.payload(new AuthenticateEventData(satelliteID, "1.0.0", apiKey)));
+    {
+      AuthenticateEventData data = new AuthenticateEventData();
+      data.leaseID = leaseID;
+      data.leaseToken = leaseToken;
+      session.getAsyncRemote().sendObject(SatelliteWebSocketEvents.AUTHENTICATE.payload(data));
+    }
   }
 
   /**
