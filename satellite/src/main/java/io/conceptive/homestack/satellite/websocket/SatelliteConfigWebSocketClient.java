@@ -50,7 +50,7 @@ class SatelliteConfigWebSocketClient implements IMetricRecordPublisher
   @OnOpen
   void onOpen(@NotNull Session pSession, @Nullable EndpointConfig pConfig)
   {
-    _LOGGER.info("Connection to cloud host established, authenticating...");
+    _LOGGER.info("Connection to homestack cloud established, authenticating...");
     session = pSession;
     connected = null;
 
@@ -63,7 +63,7 @@ class SatelliteConfigWebSocketClient implements IMetricRecordPublisher
   {
     if (connected != Boolean.TRUE)
     {
-      _LOGGER.info("Connection to cloud host established and authenticated successfully");
+      _LOGGER.info("Connection to homestack cloud established and authenticated successfully");
       connected = true;
     }
 
@@ -78,14 +78,14 @@ class SatelliteConfigWebSocketClient implements IMetricRecordPublisher
   @OnClose
   void onClose(@NotNull Session pSession, @Nullable CloseReason pReason)
   {
-    _LOGGER.warn("Connection to cloud host closed unexpectedly (" + pReason + ")");
+    _LOGGER.warn("Connection to homestack cloud closed unexpectedly (" + pReason + ")");
     connected = false;
   }
 
   @OnError
   void onError(@NotNull Session pSession, @Nullable Throwable pThrowable)
   {
-    _LOGGER.error("Unexpected error (" + pThrowable + ") in cloud host communication appeared");
+    _LOGGER.error("Unexpected error (" + pThrowable + ") in homestack cloud communication appeared");
     connected = false;
   }
 
@@ -105,7 +105,7 @@ class SatelliteConfigWebSocketClient implements IMetricRecordPublisher
     }
     catch (Exception e)
     {
-      _LOGGER.error("Failed to connect to cloud host '" + backendBaseURL + "/satellites" + "'");
+      _LOGGER.error("Failed to connect to homestack cloud '" + backendBaseURL + "/satellites" + "'");
     }
   }
 
@@ -150,7 +150,7 @@ class SatelliteConfigWebSocketClient implements IMetricRecordPublisher
     }
     catch (Exception e)
     {
-      _LOGGER.error("Failed to send keepalive message to cloud host");
+      _LOGGER.error("Failed to send keepalive message to homestack cloud");
     }
   }
 

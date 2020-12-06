@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Consumer that receives the (new) configuration
- * model that was received by the cloud host
+ * model that was received by homestack cloud
  *
  * @author w.glanzer, 15.11.2020
  */
