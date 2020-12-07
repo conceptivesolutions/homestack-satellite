@@ -1,11 +1,9 @@
 name: Build and Push
 
 on:
-  workflow_dispatch:
-    on:
   push:
     tags:
-      - '*'
+      - 'v*.*.*'
 
 jobs:
   build:
@@ -14,6 +12,10 @@ jobs:
       # Checkout Sources
       - name: Checkout Sources
         uses: actions/checkout@v2
+
+      # Set Version
+      - name: Set Version
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
 
       # Init JVM
       - name: Set up JDK
@@ -43,5 +45,11 @@ jobs:
       - name: Create Image
         working-directory: ./satellite
         run: |
-          docker build -f src/main/docker/Dockerfile.jvm -t images.conceptive.io/homestack.satellite:latest .
+          docker build -f src/main/docker/Dockerfile.jvm -t images.conceptive.io/homestack.satellite:latest -t images.conceptive.io/homestack.satellite:${{ env.RELEASE_VERSION }} .
+
+      # Push Docker Image
+      - name: Push Image
+        working-directory: ./satellite
+        run: |
           docker push images.conceptive.io/homestack.satellite:latest
+          docker push images.conceptive.io/homestack.satellite:${{ env.RELEASE_VERSION }}
