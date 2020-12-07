@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Satellite" type="QuarkusMavenBridge">
     <option name="jreName" value="11" />
-    <option name="vmOptions" value="-Dquarkus.http.port=8081 -Dhomestack.rest.backend.url=http://localhost:8080 -Dhomestack.satellite.lease.id=pOzRwrPgqVguFt6v7GMfnHG7yyN4dFZq -Dhomestack.satellite.lease.token=VBpq0kmB4pyXtZO99g0bBA1nYe1pUDLQKhrK990ooMYZike1zoPjntCJU6DfqxfyhEkuKKFRD5XMJvj7AtwciGCqZtGz4oHlsIILQdogKw56NDDjBLnDEktQzgaikCCVpNJvWLZESJScIO2wmk9PrGSwL6uzSQmf16gndobYRbCmWPYTxOBypAJJnYFEl3Yr" />
+    <option name="vmOptions" value="-Dquarkus.http.port=8081 -Dhomestack.rest.backend.url=http://localhost:8080 -Dhomestack.satellite.lease.id=M0bGKMcqaOXk4ps1nsNp1Yd4vcTYT0LI -Dhomestack.satellite.lease.token=Mrckan1tSiNrSQH98auaaMqM5znXbCtbX8OfGMOHOvOd1zZOMzkFRfL2XsV8zOASWv4PNrC2pS9CRSgAXINA8pR117RKNdENunpuVTrp3e4Ggrd45sdqfEPggljdI7ztOBTghfpbKxDxSgykl3K6uDKB5lgL9cuVIboG0M3bFuF5bdFd48NrP7CSQYabj6Q7" />
     <option name="workingDir" value="$PROJECT_DIR$/satellite" />
     <method v="2" />
   </configuration>
