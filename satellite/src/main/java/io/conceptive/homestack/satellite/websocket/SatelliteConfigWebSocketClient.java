@@ -38,7 +38,7 @@ class SatelliteConfigWebSocketClient implements IMetricRecordPublisher
   @ConfigProperty(name = "homestack.satellite.lease.token")
   protected String leaseToken;
 
-  @ConfigProperty(name = "homestack.rest.backend.url")
+  @ConfigProperty(name = "homestack.cloud.websocket.url")
   protected String backendBaseURL;
 
   @Inject
@@ -105,7 +105,7 @@ class SatelliteConfigWebSocketClient implements IMetricRecordPublisher
     }
     catch (Exception e)
     {
-      _LOGGER.error("Failed to connect to homestack cloud '" + backendBaseURL + "/satellites" + "'", e);
+      _LOGGER.error("Failed to connect to homestack cloud '" + url + "'", e);
     }
   }
 
