@@ -85,7 +85,7 @@ class SatelliteConfigWebSocketClient implements IMetricRecordPublisher
   @OnError
   void onError(@NotNull Session pSession, @Nullable Throwable pThrowable)
   {
-    _LOGGER.error("Unexpected error (" + pThrowable + ") in homestack cloud communication appeared");
+    _LOGGER.error("Unexpected error in homestack cloud communication appeared", pThrowable);
     connected = false;
   }
 
@@ -105,7 +105,7 @@ class SatelliteConfigWebSocketClient implements IMetricRecordPublisher
     }
     catch (Exception e)
     {
-      _LOGGER.error("Failed to connect to homestack cloud '" + backendBaseURL + "/satellites" + "'");
+      _LOGGER.error("Failed to connect to homestack cloud '" + backendBaseURL + "/satellites" + "'", e);
     }
   }
 
@@ -150,7 +150,7 @@ class SatelliteConfigWebSocketClient implements IMetricRecordPublisher
     }
     catch (Exception e)
     {
-      _LOGGER.error("Failed to send keepalive message to homestack cloud");
+      _LOGGER.error("Failed to send keepalive message to homestack cloud", e);
     }
   }
 
