@@ -1,4 +1,4 @@
-name: Compile / onTagged
+name: Compile / onManualRun
 
 on:
   workflow_dispatch:
