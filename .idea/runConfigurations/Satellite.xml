@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Satellite" type="QuarkusRunConfigurationType" factoryName="Quarkus">
-    <module name="satellite" />
+    <module name="homestack-satellite" />
     <QsMavenRunConfiguration>
       <MavenSettings>
         <option name="myGeneralSettings" />
@@ -34,8 +34,8 @@
             <option name="profilesMap">
               <map />
             </option>
-            <option name="resolveToWorkspace" value="true" />
-            <option name="workingDirPath" value="$PROJECT_DIR$/satellite" />
+            <option name="resolveToWorkspace" value="false" />
+            <option name="workingDirPath" value="$PROJECT_DIR$" />
           </MavenRunnerParameters>
         </option>
       </MavenSettings>

@@ -34,13 +34,13 @@ public class MetricCollectorService
   private static final Logger _LOGGER = Logger.getLogger(MetricCollectorService.class);
 
   @Inject
-  IConfigProvider configProvider;
+  protected IConfigProvider configProvider;
 
   @Inject
-  IMetricRecordPublisher recordPublisher;
+  protected IMetricRecordPublisher recordPublisher;
 
   @Inject
-  Instance<IMetricExecutor> metricExecutors;
+  protected Instance<IMetricExecutor> metricExecutors;
 
   private CompositeDisposable disposable;
 
@@ -107,32 +107,35 @@ public class MetricCollectorService
     // check all metrics
     for (MetricDataModel metric : pConfig.metrics)
     {
-      IMetricExecutor executor = executors.get(metric.type);
-      if (executor != null)
+      if (metric.type != null)
       {
-        DeviceDataModel device = devices.get(metric.deviceID);
-        if (device != null)
+        IMetricExecutor executor = executors.get(metric.type.toLowerCase(Locale.ROOT));
+        if (executor != null)
         {
-          if (executor.canExecute())
+          DeviceDataModel device = devices.get(metric.deviceID);
+          if (device != null)
           {
-            // execute
-            IMetricRecord record = executor.execute(device, new _PreferenceImpl(metric));
+            if (executor.canExecute())
+            {
+              // execute
+              IMetricRecord record = executor.execute(device, new _PreferenceImpl(metric));
 
-            // add result
-            result.add(MetricRecordDataModel.builder()
-                           .id(UUID.randomUUID().toString())
-                           .metricID(metric.id)
-                           .recordDate(new Date())
-                           .state(EMetricRecordState.valueOf(record.getState().name()))
-                           .result(record.getResult())
-                           .build());
+              // add result
+              result.add(MetricRecordDataModel.builder()
+                             .id(UUID.randomUUID().toString())
+                             .metricID(metric.id)
+                             .recordDate(new Date())
+                             .state(EMetricRecordState.valueOf(record.getState().name()))
+                             .result(record.getResult())
+                             .build());
+            }
           }
+          else
+            _LOGGER.warn("Device with id " + metric.deviceID + " not found");
         }
         else
-          _LOGGER.warn("Device with id " + metric.deviceID + " not found");
+          _LOGGER.warn("Executor with id " + metric.type + " not found");
       }
-      else
-        _LOGGER.warn("Executor with id " + metric.type + " not found");
     }
 
     // publish
