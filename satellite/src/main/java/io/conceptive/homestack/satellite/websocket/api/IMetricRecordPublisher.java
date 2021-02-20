@@ -1,6 +1,6 @@
 package io.conceptive.homestack.satellite.websocket.api;
 
-import io.conceptive.homestack.model.data.MetricRecordDataModel;
+import io.conceptive.homestack.model.data.metric.MetricRecordDataModel;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;

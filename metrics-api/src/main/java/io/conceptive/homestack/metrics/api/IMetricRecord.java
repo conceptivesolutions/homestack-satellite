@@ -1,6 +1,6 @@
 package io.conceptive.homestack.metrics.api;
 
-import io.conceptive.homestack.model.data.MetricRecordDataModel;
+import io.conceptive.homestack.model.data.metric.EMetricRecordState;
 import org.jetbrains.annotations.*;
 
 import java.util.Map;
@@ -17,7 +17,7 @@ public interface IMetricRecord
    * @return the current state of this metrics
    */
   @NotNull
-  MetricRecordDataModel.EState getState();
+  EMetricRecordState getState();
 
   /**
    * @return additional description to the current state

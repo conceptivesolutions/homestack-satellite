@@ -1,6 +1,6 @@
 package io.conceptive.homestack.metrics.api;
 
-import io.conceptive.homestack.model.data.MetricRecordDataModel;
+import io.conceptive.homestack.model.data.metric.EMetricRecordState;
 import org.jetbrains.annotations.*;
 
 import java.util.*;
@@ -12,17 +12,17 @@ import java.util.*;
  */
 public class SimpleMetricRecord implements IMetricRecord
 {
-  private final MetricRecordDataModel.EState state;
+  private final EMetricRecordState state;
   private final Map<String, String> result = new HashMap<>();
 
-  public SimpleMetricRecord(@NotNull MetricRecordDataModel.EState pState)
+  public SimpleMetricRecord(@NotNull EMetricRecordState pState)
   {
     state = pState;
   }
 
   @NotNull
   @Override
-  public MetricRecordDataModel.EState getState()
+  public EMetricRecordState getState()
   {
     return state;
   }

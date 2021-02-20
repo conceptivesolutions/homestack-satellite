@@ -100,7 +100,6 @@
       <option name="FINALLY_ON_NEW_LINE" value="true" />
       <option name="ALIGN_MULTILINE_PARAMETERS_IN_CALLS" value="true" />
       <option name="ALIGN_MULTILINE_ARRAY_INITIALIZER_EXPRESSION" value="true" />
-      <option name="PARENT_SETTINGS_INSTALLED" value="true" />
     </codeStyleSettings>
     <codeStyleSettings language="Markdown">
       <indentOptions>
@@ -119,7 +118,6 @@
       <option name="FINALLY_ON_NEW_LINE" value="true" />
       <option name="ALIGN_MULTILINE_PARAMETERS_IN_CALLS" value="true" />
       <option name="ALIGN_MULTILINE_ARRAY_INITIALIZER_EXPRESSION" value="true" />
-      <option name="PARENT_SETTINGS_INSTALLED" value="true" />
     </codeStyleSettings>
     <codeStyleSettings language="XML">
       <indentOptions>

@@ -1,6 +1,6 @@
 package io.conceptive.homestack.metrics.api;
 
-import io.conceptive.homestack.model.data.DeviceDataModel;
+import io.conceptive.homestack.model.data.device.DeviceDataModel;
 import org.jetbrains.annotations.NotNull;
 
 /**

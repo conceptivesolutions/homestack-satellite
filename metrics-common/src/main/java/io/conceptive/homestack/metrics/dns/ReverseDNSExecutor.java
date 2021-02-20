@@ -2,7 +2,8 @@ package io.conceptive.homestack.metrics.dns;
 
 import com.google.common.base.Strings;
 import io.conceptive.homestack.metrics.api.*;
-import io.conceptive.homestack.model.data.*;
+import io.conceptive.homestack.model.data.device.DeviceDataModel;
+import io.conceptive.homestack.model.data.metric.EMetricRecordState;
 import org.apache.commons.lang3.SystemUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,7 +41,7 @@ public class ReverseDNSExecutor implements IMetricExecutor
       InetAddress address = InetAddress.getByName(pDevice.address);
       String hostName = address.getHostName();
       if (!Strings.isNullOrEmpty(hostName))
-        return new SimpleMetricRecord(MetricRecordDataModel.EState.SUCCESS)
+        return new SimpleMetricRecord(EMetricRecordState.SUCCESS)
             .withResult("name", hostName);
     }
     catch (Exception e)
@@ -49,7 +50,7 @@ public class ReverseDNSExecutor implements IMetricExecutor
     }
 
     // not resolvable
-    return new SimpleMetricRecord(MetricRecordDataModel.EState.UNKNOWN);
+    return new SimpleMetricRecord(EMetricRecordState.UNKNOWN);
   }
 
 }

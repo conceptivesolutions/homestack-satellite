@@ -1,6 +1,6 @@
 package io.conceptive.homestack.satellite.websocket;
 
-import io.conceptive.homestack.model.data.MetricRecordDataModel;
+import io.conceptive.homestack.model.data.metric.MetricRecordDataModel;
 import io.conceptive.homestack.model.satellite.SatelliteConfigurationDataModel;
 import io.conceptive.homestack.model.satellite.events.SatelliteWebSocketEvents;
 import io.conceptive.homestack.model.satellite.events.data.*;

@@ -2,7 +2,8 @@ package io.conceptive.homestack.satellite.metrics;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.conceptive.homestack.metrics.api.*;
-import io.conceptive.homestack.model.data.*;
+import io.conceptive.homestack.model.data.device.DeviceDataModel;
+import io.conceptive.homestack.model.data.metric.*;
 import io.conceptive.homestack.model.satellite.SatelliteConfigurationDataModel;
 import io.conceptive.homestack.satellite.config.IConfigProvider;
 import io.conceptive.homestack.satellite.websocket.api.IMetricRecordPublisher;
@@ -112,9 +113,20 @@ public class MetricCollectorService
         DeviceDataModel device = devices.get(metric.deviceID);
         if (device != null)
         {
-          IMetricPreferences preference = new _PreferenceImpl(metric);
           if (executor.canExecute())
-            result.add(_toMetricRecord(device, executor, executor.execute(device, preference)));
+          {
+            // execute
+            IMetricRecord record = executor.execute(device, new _PreferenceImpl(metric));
+
+            // add result
+            result.add(MetricRecordDataModel.builder()
+                           .id(UUID.randomUUID().toString())
+                           .metricID(metric.id)
+                           .recordDate(new Date())
+                           .state(EMetricRecordState.valueOf(record.getState().name()))
+                           .result(record.getResult())
+                           .build());
+          }
         }
         else
           _LOGGER.warn("Device with id " + metric.deviceID + " not found");
@@ -126,26 +138,6 @@ public class MetricCollectorService
     // publish
     if (!result.isEmpty())
       recordPublisher.sendMetricRecords(result);
-  }
-
-  /**
-   * Converts a metricsResult to the serializable metric result object
-   *
-   * @param pDevice   Device which the metric belongs to
-   * @param pExecutor the executor that issued the given record
-   * @param pResult   result to convert
-   * @return converted result
-   */
-  @NotNull
-  private MetricRecordDataModel _toMetricRecord(@NotNull DeviceDataModel pDevice, @NotNull IMetricExecutor pExecutor, @NotNull IMetricRecord pResult)
-  {
-    MetricRecordDataModel metricRecord = new MetricRecordDataModel();
-    metricRecord.deviceID = pDevice.id;
-    metricRecord.recordTime = new Date();
-    metricRecord.type = pExecutor.getType();
-    metricRecord.state = MetricRecordDataModel.EState.valueOf(pResult.getState().name());
-    metricRecord.result = pResult.getResult();
-    return metricRecord;
   }
 
   /**

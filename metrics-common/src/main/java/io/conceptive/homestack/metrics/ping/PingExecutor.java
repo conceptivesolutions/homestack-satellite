@@ -2,7 +2,8 @@ package io.conceptive.homestack.metrics.ping;
 
 import com.zaxxer.ping.*;
 import io.conceptive.homestack.metrics.api.*;
-import io.conceptive.homestack.model.data.*;
+import io.conceptive.homestack.model.data.device.DeviceDataModel;
+import io.conceptive.homestack.model.data.metric.EMetricRecordState;
 import io.reactivex.*;
 import io.reactivex.disposables.Disposable;
 import org.apache.commons.lang3.SystemUtils;
@@ -154,7 +155,7 @@ public class PingExecutor implements IMetricExecutor
    */
   private static class _PingResult implements IMetricRecord
   {
-    private final MetricRecordDataModel.EState state;
+    private final EMetricRecordState state;
     private final Map<String, String> result;
 
     public _PingResult(@NotNull List<_PingResultObject> pResults)
@@ -170,7 +171,7 @@ public class PingExecutor implements IMetricExecutor
 
     @NotNull
     @Override
-    public MetricRecordDataModel.EState getState()
+    public EMetricRecordState getState()
     {
       return state;
     }
@@ -189,16 +190,16 @@ public class PingExecutor implements IMetricExecutor
      * @return the state
      */
     @NotNull
-    private static MetricRecordDataModel.EState _getState(@NotNull List<_PingResultObject> pResults)
+    private static EMetricRecordState _getState(@NotNull List<_PingResultObject> pResults)
     {
       if (pResults.isEmpty())
-        return MetricRecordDataModel.EState.UNKNOWN;
+        return EMetricRecordState.UNKNOWN;
       if (pResults.stream().allMatch(pResult -> pResult.responseTime >= 0))
-        return MetricRecordDataModel.EState.SUCCESS;
+        return EMetricRecordState.SUCCESS;
       else if (pResults.stream().anyMatch(pResult -> pResult.responseTime >= 0))
-        return MetricRecordDataModel.EState.WARNING;
+        return EMetricRecordState.WARNING;
       else
-        return MetricRecordDataModel.EState.FAILURE;
+        return EMetricRecordState.FAILURE;
     }
   }
 
