@@ -1,0 +1,38 @@
+name: Compile / onTagged
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Setup / Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup / JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Setup / settings.xml
+        uses: s4u/maven-settings-action@v2.2.0
+        with:
+          servers: '[{"id": "default", "username": "${{ secrets.nexus_user }}", "password": "${{ secrets.nexus_password }}"}]'
+          mirrors: '[{"id": "default", "name": "default", "mirrorOf": "*", "url": "https://nexus.conceptive.io/repository/maven-public/"}]'
+
+      - name: Setup / Docker Login
+        uses: azure/docker-login@v1
+        with:
+          login-server: images.conceptive.io
+          username: ${{ secrets.nexus_user }}
+          password: ${{ secrets.nexus_password }}
+
+      - name: Maven / Download Dependencies
+        run: mvn -Dmaven.artifact.threads=30 -T 1C -B de.qaware.maven:go-offline-maven-plugin:1.2.8:resolve-dependencies
+
+      - name: JVM / Compile
+        run: mvn -T 1C clean package -Dquarkus.container-image.build=true
+
+      - name: Deploy / Docker
+        run: docker push images.conceptive.io/homestack.satellite:latest
