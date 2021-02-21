@@ -12,7 +12,7 @@
 
   <groupId>de.homestack.satellite</groupId>
   <artifactId>satellite</artifactId>
-  <version>2.0.0</version>
+  <version>2.0.0-SNAPSHOT</version>
   <name>HomeStack: Satellite</name>
 
   <properties>
