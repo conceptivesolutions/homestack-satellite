@@ -37,11 +37,9 @@ jobs:
         run: mvn -Dmaven.artifact.threads=30 -T 1C -B de.qaware.maven:go-offline-maven-plugin:1.2.8:resolve-dependencies
 
       - name: JVM / Compile
-        run: mvn -T 1C clean package \
-          -Dquarkus.container-image.build=true \
-          -Dquarkus.container-image.additional-tags={{ env.RELEASE_VERSION }}
+        run: mvn -T 1C -Dquarkus.container-image.build=true -Dquarkus.container-image.additional-tags=${{ env.RELEASE_VERSION }} clean package
 
       - name: Deploy / Docker
         run: |
           docker push images.conceptive.io/homestack.satellite:latest
-          docker push images.conceptive.io/homestack.satellite:{{ env.RELEASE_VERSION }}
+          docker push images.conceptive.io/homestack.satellite:${{ env.RELEASE_VERSION }}
