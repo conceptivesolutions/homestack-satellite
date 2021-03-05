@@ -1,11 +1,15 @@
 package de.homestack.satellite.websocket;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.homestack.satellite.websocket.api.*;
+import io.cloudevents.CloudEvent;
+import io.cloudevents.core.CloudEventUtils;
+import io.cloudevents.core.builder.CloudEventBuilder;
+import io.cloudevents.core.data.PojoCloudEventData;
+import io.cloudevents.jackson.PojoCloudEventDataMapper;
+import io.conceptive.homestack.model.coders.CloudEventCoder;
 import io.conceptive.homestack.model.data.metric.MetricRecordDataModel;
-import io.conceptive.homestack.model.satellite.SatelliteConfigurationDataModel;
-import io.conceptive.homestack.model.satellite.events.SatelliteWebSocketEvents;
-import io.conceptive.homestack.model.satellite.events.data.*;
-import io.conceptive.homestack.model.websocket.*;
+import io.conceptive.homestack.model.satellite.events.*;
 import io.quarkus.runtime.Startup;
 import io.quarkus.scheduler.Scheduled;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -18,7 +22,7 @@ import javax.inject.Inject;
 import javax.websocket.*;
 import java.net.URI;
 import java.nio.ByteBuffer;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Client to communicate with the backend
@@ -27,7 +31,7 @@ import java.util.Set;
  */
 @Startup
 @ApplicationScoped
-@ClientEndpoint(decoders = WebsocketEventCoder.class, encoders = WebsocketEventCoder.class)
+@ClientEndpoint(decoders = CloudEventCoder.class, encoders = CloudEventCoder.class)
 class SatelliteConfigWebSocketClient implements IMetricRecordPublisher
 {
   private static final Logger _LOGGER = Logger.getLogger(SatelliteConfigWebSocketClient.class);
@@ -59,7 +63,7 @@ class SatelliteConfigWebSocketClient implements IMetricRecordPublisher
   }
 
   @OnMessage
-  void onMessage(@NotNull WebsocketEvent<?> pMessage)
+  void onMessage(@NotNull CloudEvent pMessage)
   {
     if (connected != Boolean.TRUE)
     {
@@ -68,10 +72,13 @@ class SatelliteConfigWebSocketClient implements IMetricRecordPublisher
     }
 
     // new config received from server
-    if (pMessage.equalType(SatelliteWebSocketEvents.CONFIG))
+    if (Objects.equals(pMessage.getType(), RenewConfigurationEventData.TYPE))
     {
-      SatelliteConfigurationDataModel model = SatelliteWebSocketEvents.CONFIG.payloadOf(pMessage);
-      consumers.forEach(pConsumer -> pConsumer.onSatelliteConfigReceived(model));
+      PojoCloudEventData<RenewConfigurationEventData> data = CloudEventUtils.mapData(pMessage, PojoCloudEventDataMapper.from(new ObjectMapper(), RenewConfigurationEventData.class));
+      if (data != null)
+        consumers.forEach(pConsumer -> pConsumer.onSatelliteConfigReceived(data.getValue().config));
+      else
+        _LOGGER.warn("Invalid configuration event from cloud received");
     }
   }
 
@@ -114,9 +121,15 @@ class SatelliteConfigWebSocketClient implements IMetricRecordPublisher
   {
     if (session != null)
     {
-      MetricRecordsEventData data = new MetricRecordsEventData();
-      data.records = pRecords;
-      session.getAsyncRemote().sendObject(SatelliteWebSocketEvents.RECORDS.payload(data));
+      session.getAsyncRemote().sendObject(CloudEventBuilder.v1()
+                                              .withId(UUID.randomUUID().toString())
+                                              .withType(MetricRecordsEventData.TYPE)
+                                              .withSource(URI.create("/satellite/records"))
+                                              .withData(PojoCloudEventData.wrap(MetricRecordsEventData.builder()
+                                                                                    .records(pRecords)
+                                                                                    .build(),
+                                                                                pData -> new ObjectMapper().writeValueAsBytes(pData)))
+                                              .build());
     }
     else
       _LOGGER.warn("Tried to upload records, but connection was not esablished");
@@ -129,12 +142,20 @@ class SatelliteConfigWebSocketClient implements IMetricRecordPublisher
   void sendAuthenticationEvent()
   {
     if (session != null) // todo version
-    {
-      AuthenticateEventData data = new AuthenticateEventData();
-      data.leaseID = leaseID;
-      data.leaseToken = leaseToken;
-      session.getAsyncRemote().sendObject(SatelliteWebSocketEvents.AUTHENTICATE.payload(data));
-    }
+      session.getAsyncRemote().sendObject(CloudEventBuilder.v1()
+                                              .withId(UUID.randomUUID().toString())
+                                              .withType(AuthenticateEventData.TYPE)
+                                              .withSource(URI.create("/satellite/auth"))
+                                              .withData(PojoCloudEventData.wrap(AuthenticateEventData.builder()
+                                                                                    .leaseID(leaseID)
+                                                                                    .leaseToken(leaseToken)
+                                                                                    .version("0.0.0")
+                                                                                    .commVersion(1)
+                                                                                    .build(),
+                                                                                pData -> new ObjectMapper().writeValueAsBytes(pData)))
+                                              .build());
+    else
+      _LOGGER.warn("Tried to authenticate, but connection was not esablished");
   }
 
   /**
