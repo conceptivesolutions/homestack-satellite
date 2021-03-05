@@ -33,7 +33,9 @@ class DynamicConfigProvider implements IConfigProvider, IConfigConsumer
   {
     if (!Objects.equals(currentlyUsedConfigurationSubject.getValue(), pConfig))
     {
-      Logger.getLogger(DynamicConfigProvider.class).info("New configuration received from homestack cloud");
+      Logger.getLogger(DynamicConfigProvider.class).info("New configuration received from homestack cloud " +
+                                                             "(devices: " + (pConfig.devices != null ? pConfig.devices.size() : 0) + ", " +
+                                                             "metrics: " + (pConfig.metrics != null ? pConfig.metrics.size() : 0) + ")");
       currentlyUsedConfigurationSubject.onNext(pConfig);
     }
   }
